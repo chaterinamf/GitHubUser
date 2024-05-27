@@ -2,6 +2,9 @@ import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.dsl.DependencyHandler
 
+private fun DependencyHandler.debugImplementation(dependency: Any): Dependency? =
+    add("debugImplementation", dependency)
+
 private fun DependencyHandler.implementation(dependency: Any): Dependency? =
     add("implementation", dependency)
 
@@ -15,6 +18,8 @@ private fun DependencyHandler.ksp(dependency: Any): Dependency? =
     add("ksp", dependency)
 
 fun DependencyHandler.sharedDependencies(libs: VersionCatalog) {
+    debugImplementation(libs.findLibrary("leakcanary-android").get())
+
     implementation(libs.findLibrary("core-ktx").get())
     implementation(libs.findLibrary("appcompat").get())
     implementation(libs.findLibrary("material").get())
