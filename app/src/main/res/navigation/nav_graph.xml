@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listUser">
+
+    <fragment
+        android:id="@+id/listUser"
+        android:name="com.dicoding.githubuser.presentation.list.ListUserFragment"
+        android:label="List User"
+        tools:layout="@layout/fragment_list_user">
+        <action
+            android:id="@+id/open_user_detail"
+            app:destination="@id/userDetail" />
+        <action
+            android:id="@+id/open_favourite_users"
+            app:destination="@id/favouriteUsers" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userDetail"
+        android:name="com.dicoding.githubuser.presentation.detail.UserDetailFragment"
+        android:label="User Detail"
+        tools:layout="@layout/fragment_user_detail">
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favouriteUsers"
+        android:name="com.dicoding.githubuser.favourite.presentation.FavouriteUsersFragment"
+        android:label="Favourite Users"
+        app:moduleName="favourite"
+        tools:layout="@layout/fragment_favourite_users">
+        <action
+            android:id="@+id/open_user_detail"
+            app:destination="@id/userDetail" />
+    </fragment>
+</navigation>
