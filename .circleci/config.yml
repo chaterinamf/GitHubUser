@@ -34,6 +34,12 @@ jobs:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
       - run:
+          name: create local.properties
+          command: |
+            printf "\\nGITHUB_API_KEY=$GITHUB_API_KEY" >> local.properties
+            printf "\\nBASE_URL=$BASE_URL" >> local.properties
+
+      - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
