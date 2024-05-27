@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">GitHub User</string>
     <string name="search_user">Search Account</string>
-    <string name="username">\@%1$s</string>
     <string name="user_follow">%1$d Followers • %2$d Following</string>
     <string name="favourite_users">Favourite Users</string>
     <string-array name="follow_tab_tittles">
