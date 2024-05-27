@@ -18,10 +18,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FollowFragment : Fragment(), UserAdapter.ItemUserListener {
+    private var _binding: FragmentFollowBinding? = null
+    private val binding get() = _binding!!
 
-    private val binding by lazy {
-        FragmentFollowBinding.inflate(layoutInflater)
-    }
     private val viewModel by viewModels<FollowViewModel>()
     private val adapter by lazy {
         UserAdapter(this)
@@ -30,13 +29,23 @@ class FollowFragment : Fragment(), UserAdapter.ItemUserListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = binding.root
+    ): View {
+        _binding = FragmentFollowBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             getFollow(it.getInt(FOLLOW_POSITION), it.getString(USERNAME).orEmpty())
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvUsers.adapter = null
+        adapter.submitList(null)
+        _binding = null
     }
 
     private fun getFollow(position: Int, username: String) {

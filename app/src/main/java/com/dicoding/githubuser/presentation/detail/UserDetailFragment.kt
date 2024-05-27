@@ -20,20 +20,24 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class UserDetailFragment : Fragment() {
-    private val binding: FragmentUserDetailBinding by lazy {
-        FragmentUserDetailBinding.inflate(layoutInflater)
-    }
+    private var _binding: FragmentUserDetailBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel by viewModels<UserDetailViewModel>()
     private val sectionsPagerAdapter by lazy {
-        SectionsPagerAdapter(childFragmentManager, lifecycle)
+        SectionsPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
     }
+    private var tabLayoutMediator: TabLayoutMediator? = null
     private val args: UserDetailFragmentArgs by navArgs()
     private lateinit var user: GitHubUser
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = binding.root
+    ): View {
+        _binding = FragmentUserDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,6 +45,17 @@ class UserDetailFragment : Fragment() {
         getUserDetail()
         setViewPager()
         setFavouriteView()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.apply {
+            vpUser.adapter = null
+            tlFollow.clearOnTabSelectedListeners()
+        }
+        tabLayoutMediator?.detach()
+        tabLayoutMediator = null
+        _binding = null
     }
 
     private fun getUserDetail() =
@@ -81,9 +96,10 @@ class UserDetailFragment : Fragment() {
         sectionsPagerAdapter.username = args.username
         vpUser.adapter = sectionsPagerAdapter
         val tabName = resources.getStringArray(R.array.follow_tab_tittles)
-        TabLayoutMediator(tlFollow, vpUser) { tab, position ->
+        tabLayoutMediator = TabLayoutMediator(tlFollow, vpUser) { tab, position ->
             tab.text = tabName[position]
-        }.attach()
+        }
+        tabLayoutMediator?.attach()
     }
 
     private fun setFavouriteView() = with(binding.fabFavourite) {

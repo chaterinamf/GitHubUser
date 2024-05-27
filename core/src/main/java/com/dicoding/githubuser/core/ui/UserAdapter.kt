@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.dicoding.githubuser.core.databinding.ItemUserBinding
 import com.dicoding.githubuser.core.domain.model.GitHubUser
 
-class UserAdapter(private val listener: ItemUserListener) :
+class UserAdapter(private var listener: ItemUserListener?) :
     ListAdapter<GitHubUser, UserAdapter.UserViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
@@ -26,7 +26,12 @@ class UserAdapter(private val listener: ItemUserListener) :
         holder.bind(getItem(position))
     }
 
-    inner class UserViewHolder(private val binding: ItemUserBinding) :
+    override fun onViewRecycled(holder: UserViewHolder) {
+        super.onViewRecycled(holder)
+        holder.binding.root.setOnClickListener(null) // Detach listener
+    }
+
+    inner class UserViewHolder(val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(user: GitHubUser) {
             binding.apply {
@@ -35,7 +40,7 @@ class UserAdapter(private val listener: ItemUserListener) :
                     .into(sivAvatar)
                 tvUsername.text = user.username
                 root.setOnClickListener {
-                    listener.onUserClicked(user.username)
+                    listener?.onUserClicked(user.username)
                 }
             }
         }

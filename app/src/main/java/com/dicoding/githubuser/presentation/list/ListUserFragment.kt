@@ -20,9 +20,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ListUserFragment : Fragment(), UserAdapter.ItemUserListener {
-    private val binding: FragmentListUserBinding by lazy {
-        FragmentListUserBinding.inflate(layoutInflater)
-    }
+    private var _binding: FragmentListUserBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel by viewModels<ListUserViewModel>()
     private val adapter by lazy {
         UserAdapter(this)
@@ -30,7 +30,10 @@ class ListUserFragment : Fragment(), UserAdapter.ItemUserListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = binding.root
+    ): View {
+        _binding = FragmentListUserBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,6 +41,14 @@ class ListUserFragment : Fragment(), UserAdapter.ItemUserListener {
         setupSearchBar()
         handleMenuAction()
         getListUser()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.rvUsers.adapter = null
+        binding.searchBar.menu.clear()
+        adapter.submitList(null)
+        _binding = null
     }
 
     private fun handleMenuAction() = with(binding.searchBar) {
