@@ -1,7 +1,5 @@
 package com.dicoding.githubuser.favourite.presentation
 
-//import com.dicoding.githubuser.di.DynamicFeatureComponent
-//import com.dicoding.githubuser.favourite.utils.ViewModelFactory
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
