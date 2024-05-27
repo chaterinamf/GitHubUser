@@ -33,7 +33,8 @@ class GitHubUserRepository @Inject constructor(
     override fun getUserDetail(username: String) = flow {
         emit(Result.Loading)
         try {
-            val detail = DataMapper.mapDetailResponseToDomain(apiService.getDetailUser(username))
+            val response = apiService.getDetailUser(username)
+            val detail = DataMapper.mapDetailResponseToDomain(response)
             emit(Result.Success(detail))
         } catch (e: Exception) {
             e.printStackTrace()

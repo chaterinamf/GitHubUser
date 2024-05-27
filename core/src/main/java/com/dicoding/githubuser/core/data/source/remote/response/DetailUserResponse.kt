@@ -17,14 +17,14 @@ data class DetailUserResponse(
     val email: String? = null,
 
     @SerializedName("followers")
-    val followers: Int,
+    val followers: Int? = null,
 
     @SerializedName("avatar_url")
     val avatarUrl: String,
 
     @SerializedName("following")
-    val following: Int,
+    val following: Int? = null,
 
     @SerializedName("name")
-    val name: String
+    val name: String? = null
 ) : Parcelable

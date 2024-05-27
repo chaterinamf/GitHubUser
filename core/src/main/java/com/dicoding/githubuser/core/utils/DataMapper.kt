@@ -22,9 +22,9 @@ object DataMapper {
         input.username,
         input.id,
         input.email,
-        input.followers,
+        input.followers ?: 0,
         input.avatarUrl,
-        input.following,
-        input.name
+        input.following ?: 0,
+        input.name.orEmpty(),
     )
 }
