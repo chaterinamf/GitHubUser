@@ -40,6 +40,11 @@ android {
                 "String",
                 "BASE_URL", gradleLocalProperties(rootDir, providers).getProperty("BASE_URL")
             )
+            buildConfigField(
+                "String",
+                "GITHUB_PINNING",
+                gradleLocalProperties(rootDir, providers).getProperty("GITHUB_PINNING")
+            )
         }
         debug {
             buildConfigField(
@@ -50,6 +55,11 @@ android {
             buildConfigField(
                 "String",
                 "BASE_URL", gradleLocalProperties(rootDir, providers).getProperty("BASE_URL")
+            )
+            buildConfigField(
+                "String",
+                "GITHUB_PINNING",
+                gradleLocalProperties(rootDir, providers).getProperty("GITHUB_PINNING")
             )
         }
     }
@@ -64,6 +74,10 @@ android {
 
 dependencies {
     sharedDependencies(versionCatalogs.named("libs"))
+
+    // Database Encryption
+    implementation(libs.android.database.sqlcipher)
+    implementation(libs.sqlite.ktx)
 
     // Room
     implementation(libs.room.runtime)

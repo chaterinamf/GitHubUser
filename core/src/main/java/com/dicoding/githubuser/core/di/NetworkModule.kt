@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -26,11 +27,17 @@ class NetworkModule {
     }
 
     @Provides
-    fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(interceptor)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .build()
+    fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient {
+        val certificatePinner = CertificatePinner.Builder()
+            .add(BuildConfig.BASE_URL, BuildConfig.GITHUB_PINNING)
+            .build()
+        return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .certificatePinner(certificatePinner)
+            .build()
+    }
 
     @Provides
     fun provideApiService(client: OkHttpClient): ApiService {
