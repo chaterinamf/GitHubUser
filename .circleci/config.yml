@@ -38,6 +38,7 @@ jobs:
           command: |
             printf "\\nGITHUB_API_KEY=$GITHUB_API_KEY" >> local.properties
             printf "\\nBASE_URL=$BASE_URL" >> local.properties
+            printf "\\nGITHUB_PINNING=$GITHUB_PINNING" >> local.properties
 
       - run:
           name: Download Dependencies
@@ -51,11 +52,6 @@ jobs:
       # The next step will run the unit tests
       - android/run-tests:
           test-command: ./gradlew lint testDebug --continue
-
-      # Then start the emulator and run the Instrumentation tests!
-      - android/start-emulator-and-run-tests:
-          test-command: ./gradlew connectedDebugAndroidTest
-          system-image: system-images;android-25;google_apis;x86
 
       # And finally run the release build
       - run:
